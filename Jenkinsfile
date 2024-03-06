@@ -32,7 +32,7 @@ stage('Build') {
         stage('apply') {
     steps {
         bat 'aws sts get-caller-identity --query 'Account' --output text'
-        #bat 'terraform apply --auto-approve'
+
     }
 }
 
