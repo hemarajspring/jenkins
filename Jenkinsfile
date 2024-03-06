@@ -34,7 +34,7 @@ pipeline {
                     $class: 'AmazonWebServicesCredentialsBinding',
                     accessKeyVariable: 'AWS_ACCESS_KEY_ID',
                     secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
-                    credentialsId: 'your-credentials-id' // Replace with your credentials ID
+                    credentialsId: 'jenkins-cross-test-1' // Replace with your credentials ID
                 ]]) {
                     bat "aws sts get-caller-identity --query 'Account' --output text"
                     bat "terraform apply --auto-approve"
