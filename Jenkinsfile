@@ -1,9 +1,11 @@
 pipeline {
     agent any
+    
     environment {
         TERRAFORM_VERSION = "1.1.0"
         TERRAFORM_HOME = "${WORKSPACE}/terraform"
     }
+    
     stages {
         stage('Install Terraform') {
             steps {
@@ -28,8 +30,15 @@ pipeline {
         }
         stage('Apply') {
             steps {
-                bat "aws sts get-caller-identity --query 'Account' --output text"
-                bat "terraform apply --auto-approve"
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY',
+                    credentialsId: 'your-credentials-id' // Replace with your credentials ID
+                ]]) {
+                    bat "aws sts get-caller-identity --query 'Account' --output text"
+                    bat "terraform apply --auto-approve"
+                }
             }
         }
     }
