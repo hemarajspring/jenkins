@@ -11,5 +11,5 @@ resource "aws_s3_bucket" "example_bucket" {
   bucket = "${random_string.bucket_name.result}"
 
   # You can add additional configurations as needed
-  acl    = "private"
+
 }
