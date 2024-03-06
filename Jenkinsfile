@@ -17,6 +17,19 @@ stage('Build') {
         bat 'terraform.exe --version'
     }
 }
+    stage('Init') {
+    steps {
+
+        bat 'terraform init'
+    }
+}
+    stage('plan') {
+    steps {
+
+        bat 'terraform plan'
+    }
+}
 
     }
+    
 }
