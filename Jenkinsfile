@@ -29,6 +29,12 @@ stage('Build') {
         bat 'terraform plan'
     }
 }
+        stage('apply') {
+    steps {
+
+        bat 'terraform apply --auto-approve'
+    }
+}
 
     }
     
