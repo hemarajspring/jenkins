@@ -14,23 +14,25 @@ pipeline {
     stages {
         stage('Install Terraform') {
             steps {
-                bat "curl -o terraform_${TERRAFORM_VERSION}_windows_amd64.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_windows_amd64.zip"
-                bat "terraform.exe --version"
+                sh "curl -o terraform_${TERRAFORM_VERSION}_linux_amd64.zip https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+                sh "unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip"
+                sh "chmod +x terraform"
+                sh "./terraform --version"
             }
         }
         stage('Build') {
             steps {
-                bat 'terraform.exe --version'
+                sh "./terraform --version"
             }
         }
         stage('Init') {
             steps {
-                bat 'terraform init'
+                sh "./terraform init"
             }
         }
         stage('Plan') {
             steps {
-                bat 'terraform plan'
+                sh "./terraform plan"
             }
         }
         stage('Assume Role and Apply') {
@@ -53,8 +55,8 @@ pipeline {
                             [$class: 'AmazonWebServicesCredentialsBinding', accessKeyVariable: 'AWS_ACCESS_KEY_ID', secretKeyVariable: 'AWS_SECRET_ACCESS_KEY', credentialsId: ''],
                             [$class: 'StringBinding', credentialsId: '', variable: 'AWS_SESSION_TOKEN', value: sessionToken]
                         ]) {
-                            bat "aws sts get-caller-identity --query 'Account' --output text"
-                            bat "terraform apply --auto-approve"
+                            sh "aws sts get-caller-identity --query 'Account' --output text"
+                            sh "terraform apply --auto-approve"
                         }
                     }
                 }
